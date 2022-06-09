@@ -1,44 +1,45 @@
+import { List } from "immutable";
+
 // redux를 이용한다?
 //import produce from "immer";
 
 // text data 원본
-export const backupListData = [
-  {
-    textcommend: "",
-  },
-];
-// 추가해줄 text
-export const backuplistcomment = {
-  textcommend: "",
-};
-export let listclone;
+const backupListData = [];
+// 댓글
+
 export const ListAdd = "ListAdd";
 export const ListDelete = "ListDelete";
+export const CommentAdd = "CommentAdd";
+export const ToggleComment = "ToggleComment";
 
-// function rootReducer(state = backupListData, action) {
-//   switch (action.type) {
-//     case ListAdd:
-//       return produce(state, (draft) => {
-//         state = [...state, backuplistcomment];
-//       });
-//     case ListDelete:
-//       return {};
-//     default:
-//       return state;
-//   }
-// }
+export let count = 1;
 function rootReducer(state = backupListData, action) {
   if (action.type === "ListAdd") {
-    // state.concat(backuplistcomment.textcommend);
+    const newstate = state.concat({
+      id: state.length + 1,
+      textcommend: action.data.textcommend,
+      comment: [],
+      toglelist: true,
+    });
+    count++;
 
-    state = [...state, backupListData];
-    //state.push(backuplistcomment);
-    //state = listclone;
-    return state;
-  }
-  if (action.type === "ListDelete") {
-    state.filter((index) => index.textcommend !== state.textcommend);
-    return state;
+    return newstate;
+  } else if (action.type === "ListDelete") {
+    const filterlist = state.filter((index) => index.id !== action.payload);
+    state.map((index) => (index.id = action.payload2++));
+    // console.log(filterlist);
+    return filterlist;
+  } else if (action.type === "CommentAdd") {
+  } else if (action.type === "ToggleComment") {
+    const togleFliterList = state.map((index) =>
+      index.id === action.payload
+        ? {
+            ...index,
+            toglelist: !index.toglelist,
+          }
+        : index
+    );
+    return togleFliterList;
   }
 }
 
