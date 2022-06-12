@@ -1,4 +1,10 @@
-import React, { createRef, useEffect, useRef, useState } from "react";
+import React, {
+  createRef,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import styled from "styled-components";
 import PostListAll from "./postListAll";
 import {
@@ -6,8 +12,10 @@ import {
   ListDelete,
   ToggleComment,
   CommentAdd,
+  CommentDelete,
 } from "../../backupdata/backupdata";
 import { useSelector, useDispatch } from "react-redux";
+import { cotext1 } from "./postListAll";
 const Post = styled.form`
   width: 50%;
   height: 100px;
@@ -26,17 +34,28 @@ const Post = styled.form`
 `;
 function PostList() {
   const listCloneData = useSelector((state) => state);
+
   const dispatch = useDispatch();
 
   // 두 개 만들어서 하나는 입력필드, 하나는 출력 필드에 출력하는 방법.
   // 입력시 text 변환 객체
   const [text1, text2] = useState("");
+
   // 댓글 Toggle 기능
 
   // const textOnsubmit = (e) => {
   //   e.preventDefault();
   //   textchange2(text1);
   // };
+  // togle 숫자
+  // 댓글
+  const [cotext1, cotext2] = useState("");
+
+  const coTextChange = (e) => {
+    const comendText1 = e.target.value;
+    cotext2(comendText1);
+  };
+
   useEffect(() => {
     console.log("listCloneData", listCloneData);
   }, [listCloneData]);
@@ -44,29 +63,32 @@ function PostList() {
   const textChagnge = (e) => {
     text2(e.target.value);
   };
+
   const textAdd = () => {
-    // dataList2([...dataList, text1]);
-    // console.log(dataList);
-
     dispatch({ type: ListAdd, data: { textcommend: text1 } });
-
-    // console.log(listCloneData);
   };
   const deleteList = (id) => {
     dispatch({ type: ListDelete, payload: id, payload2: 1 });
   };
-  let togle;
+
   const commentExpend = (id) => {
     dispatch({ type: ToggleComment, payload: id });
   };
-
-  const [commentToogle, commentToogle2] = useState("none");
-  const commentExpend2 = (i) => {
-    if (i == "none") {
-      commentToogle2("block");
-    } else if (i == "block") {
-      commentToogle2("none");
-    }
+  const commendAdd2 = (id) => {
+    dispatch({
+      type: CommentAdd,
+      data: { textcommend2: cotext1 },
+      payload: id,
+    });
+  };
+  const commendDelete = (v, commend) => {
+    console.log(commend);
+    dispatch({
+      type: CommentDelete,
+      payload: commend,
+      payload2: 1,
+      payload3: v,
+    });
   };
 
   const listOutput =
@@ -80,6 +102,14 @@ function PostList() {
           deletelist={() => deleteList(v.id)}
           commentList={() => commentExpend(v.id)}
           comment={v.toglelist}
+          commend={coTextChange}
+          commendAdd2={() => commendAdd2(v.id)}
+          commendAll={v.comment.map((commend) => (
+            <li>
+              {commend.textcommend2}
+              {<p onClick={() => commendDelete(v.id, commend.id)}>삭제</p>}
+            </li>
+          ))}
         ></PostListAll>
       </>
     ));

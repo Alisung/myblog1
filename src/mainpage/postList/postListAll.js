@@ -1,10 +1,10 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 
 const AllList = styled.div`
   margin: 10% 0 0 30%;
   width: 600px;
-  max-height: 200px;
+
   height: auto;
   border: solid 1px #333;
   & .posttext {
@@ -17,18 +17,6 @@ const AllList = styled.div`
   & .commentlist {
     float: right;
   }
-  & .listView {
-    display: "block";
-    border: 1px solid #333;
-    width: 600px;
-    height: 100%;
-  }
-  & .listUnView {
-    display: "none";
-    border: 1px solid #333;
-    width: 600px;
-    height: 100%;
-  }
 `;
 
 const ContextlistAll = styled.div`
@@ -37,12 +25,20 @@ const ContextlistAll = styled.div`
   height: 100px;
 `;
 const Contextlist = styled.div`
-  display: ${(props) => props.display || "none"};
+  display: ${(props) => (props.display ? "none" : "block")};
   border: 1px solid #333;
   width: 600px;
   height: 100%;
 `;
-function PostListAll({ text, deletelist, comment, commentList }) {
+function PostListAll({
+  text,
+  deletelist,
+  comment,
+  commentList,
+  commendAdd2,
+  commend,
+  commendAll,
+}) {
   return (
     <>
       <AllList>
@@ -53,12 +49,11 @@ function PostListAll({ text, deletelist, comment, commentList }) {
         <p className="commentlist" onClick={commentList}>
           댓글
         </p>
-        <div className={comment ? "listUnView" : "listView"}>
-          <input></input>
-          <ContextlistAll>
-            <input></input>
-          </ContextlistAll>
-        </div>
+        <Contextlist display={comment}>
+          <input onChange={commend}></input>
+          <p onClick={commendAdd2}>댓글등록</p>
+          <ul>{commendAll}</ul>
+        </Contextlist>
       </AllList>
     </>
   );
