@@ -2,14 +2,22 @@ import React from "react";
 import styled from "styled-components";
 import Header from "../header/header";
 
-const loginForm = styled.div`
-  clear: both;
+const LoginBox = styled.div`
+  border: 1px solid #333;
+  width: 400px;
+  height: 300px;
 `;
 function LoginPage() {
   return (
     <>
       <Header></Header>
-      <loginForm>login페이지입니다</loginForm>
+      <LoginBox>
+        id: <input></input>
+        <br />
+        password : <input></input>
+        <br />
+        <button>Login</button>
+      </LoginBox>
     </>
   );
 }

@@ -10,6 +10,7 @@ export const ListDelete = "ListDelete";
 export const CommentAdd = "CommentAdd";
 export const ToggleComment = "ToggleComment";
 export const CommentDelete = "CommentDelete";
+export const Revisation = "Revisation";
 
 function rootReducer(state = backupListData, action) {
   if (action.type === "ListAdd") {
@@ -21,6 +22,16 @@ function rootReducer(state = backupListData, action) {
     });
 
     return newstate;
+  } else if (action.type === "Revisation") {
+    const Ravisation = state.map((index) =>
+      index.id === action.payload
+        ? {
+            ...index,
+            textcommend: action.data.changeText,
+          }
+        : index
+    );
+    return Ravisation;
   } else if (action.type === "ListDelete") {
     const filterlist = state.filter((index) => index.id !== action.payload);
     filterlist.map((index) => (index.id = action.payload2++));

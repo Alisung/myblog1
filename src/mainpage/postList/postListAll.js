@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import styled from "styled-components";
 
 const AllList = styled.div`
-  margin: 10% 0 0 30%;
+  margin: 5% 0 0 26%;
   width: 600px;
 
   height: auto;
@@ -18,7 +18,10 @@ const AllList = styled.div`
     float: right;
   }
 `;
-
+const RavisationTag = styled.p`
+  display: ${(props) => (props.display1 ? "none" : "block")};
+  float: right;
+`;
 const ContextlistAll = styled.div`
   border: 1px solid #333;
   width: 600px;
@@ -37,7 +40,13 @@ function PostListAll({
   commentList,
   commendAdd2,
   commend,
+  commend2,
   commendAll,
+  revisationText,
+  readBoolean,
+  onChangeText,
+  onChangeValue,
+  revisationToggle,
 }) {
   return (
     <>
@@ -49,9 +58,13 @@ function PostListAll({
         <p className="commentlist" onClick={commentList}>
           댓글
         </p>
+        <RavisationTag onClick={revisationText} display1={revisationToggle}>
+          수정
+        </RavisationTag>
         <Contextlist display={comment}>
-          <input onChange={commend}></input>
+          <input onChange={commend} value={commend2}></input>
           <p onClick={commendAdd2}>댓글등록</p>
+
           <ul>{commendAll}</ul>
         </Contextlist>
       </AllList>
