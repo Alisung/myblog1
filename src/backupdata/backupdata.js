@@ -2,7 +2,9 @@
 //import produce from "immer";
 
 // text data 원본
-export const backupListData = [];
+const backupListData = {
+  postalls: [],
+};
 // 댓글
 
 export const ListAdd = "ListAdd";
@@ -11,9 +13,31 @@ export const CommentAdd = "CommentAdd";
 export const ToggleComment = "ToggleComment";
 export const CommentDelete = "CommentDelete";
 export const Revisation = "Revisation";
+export const ListAddRequest = "ListAddRequest";
+export const ListRemoveRequest = "ListRemoveRequest";
+//액션 생성 함수
+export const listadd = (data1) => ({
+  type: ListAdd,
+  data: { textcommend: data1 },
+});
+export const listdelete = (data1) => ({
+  type: ListDelete,
+  payload: parseInt(data1),
+  payload2: 1,
+});
+export const listremoverequest = () => ({ type: ListRemoveRequest });
+export const listaddrequest = () => ({ type: ListAddRequest });
 
-function rootReducer(state = backupListData, action) {
-  if (action.type === "ListAdd") {
+function rootReducer(state = backupListData.postalls, action) {
+  if (action.type === "ListAddRequest") {
+    const newstate = state;
+    console.log("리스트 목록 요청중");
+    return newstate;
+  } else if (action.type === "ListRemoveRequest") {
+    const newstate = state;
+    console.log("삭제준비중");
+    return newstate;
+  } else if (action.type === "ListAdd") {
     const newstate = state.concat({
       id: state.length + 1,
       textcommend: action.data.textcommend,

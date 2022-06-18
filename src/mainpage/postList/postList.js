@@ -2,12 +2,16 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import PostListAll from "./postListAll";
 import {
+  listadd,
+  listdelete,
   ListAdd,
   ListDelete,
   ToggleComment,
   CommentAdd,
   CommentDelete,
   Revisation,
+  listaddrequest,
+  listremoverequest,
 } from "../../backupdata/backupdata";
 import { useSelector, useDispatch } from "react-redux";
 const Post = styled.form`
@@ -60,6 +64,9 @@ function PostList() {
 
   const [cotext1, cotext2] = useState("");
 
+  const getText = () => {
+    return text1;
+  };
   const coTextChange = (e) => {
     cotext2(e.target.value);
   };
@@ -72,12 +79,19 @@ function PostList() {
     text2(e.target.value);
   };
 
-  const textAdd = () => {
-    dispatch({ type: ListAdd, data: { textcommend: text1 } });
+  const textAdd = (text) => {
+    sessionStorage.setItem("Text1", text);
+    //dispatch({ type: ListAdd, data: { textcommend: text1 } });
+    dispatch(listaddrequest());
+    // dispatch(listadd(text1));
+
     text2("");
   };
   const deleteList = (id) => {
-    dispatch({ type: ListDelete, payload: id, payload2: 1 });
+    sessionStorage.setItem("DelelteNum", id);
+    // sessionStorage.setItem("DelelteNum2", 1);
+    //dispatch({ type: ListDelete, payload: id, payload2: 1 });
+    dispatch(listremoverequest());
   };
 
   const commentExpend = (id) => {
@@ -142,6 +156,9 @@ function PostList() {
     });
     readBoolean2(!readBoolean);
   };
+  const coTextChangeFung = (e) => {
+    coTextChange(e);
+  };
   const listOutput =
     listCloneData &&
     listCloneData.map((v) => (
@@ -153,9 +170,7 @@ function PostList() {
           deletelist={() => deleteList(v.id)}
           commentList={() => commentExpend(v.id)}
           comment={v.toglelist}
-          commend={(e) => {
-            coTextChange(e);
-          }}
+          commend={coTextChangeFung}
           commend2={cotext1}
           commendAdd2={() => commendAdd2(v.id)}
           revisationText={() => revisationText(v)}
@@ -181,7 +196,7 @@ function PostList() {
   return (
     <>
       <Post>
-        <p type="button" className="ptag" onClick={textAdd}>
+        <p type="button" className="ptag" onClick={() => textAdd(text1)}>
           게시물등록
         </p>
         <input
