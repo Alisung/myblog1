@@ -1,4 +1,5 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
 const AllList = styled.div`
@@ -44,10 +45,26 @@ function PostListAll({
   commendAll,
   revisationText,
   readBoolean,
-  onChangeText,
+
   onChangeValue,
   revisationToggle,
 }) {
+  const [contextvalue, contextvalue2] = useState("");
+  function changeValue(e) {
+    contextvalue2(e.target.value);
+  }
+
+  useEffect(() => {
+    sessionStorage.setItem("commendText", contextvalue);
+    // const text = sessionStorage.getItem("commendText");
+    // if (text !== "") {
+    // }
+  }, [contextvalue]);
+
+  function clearText() {
+    const a = sessionStorage.getItem("commendText");
+    contextvalue2(a);
+  }
   return (
     <>
       <AllList>
@@ -62,8 +79,15 @@ function PostListAll({
           수정
         </RavisationTag>
         <Contextlist display={comment}>
-          <input onChange={commend} value={commend2}></input>
-          <p onClick={commendAdd2}>댓글등록</p>
+          <input onChange={changeValue} value={contextvalue}></input>
+          <p
+            onClick={() => {
+              commendAdd2();
+              clearText();
+            }}
+          >
+            댓글등록
+          </p>
 
           <ul>{commendAll}</ul>
         </Contextlist>

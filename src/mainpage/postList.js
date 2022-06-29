@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import PostListAll from "./postListAll";
 import {
+  ListRoad,
+  listroad,
   listadd,
   listdelete,
   ListAdd,
@@ -10,10 +12,14 @@ import {
   CommentAdd,
   CommentDelete,
   Revisation,
+  listroadrequest,
   listaddrequest,
   listremoverequest,
-} from "../../backupdata/backupdata";
+  commentloadrequest,
+} from "../backupdata/backupdata";
 import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
+
 const Post = styled.form`
   width: 50%;
   height: 100px;
@@ -54,6 +60,84 @@ const OnChangeInput = styled.input`
   height: 50px;
 `;
 function PostList() {
+  const [testbody, testbody2] = useState("");
+  const handleChange = (e) => {
+    testbody2(e.target.value);
+  };
+  //불러오기
+  const [testcase1, testcase2] = useState([]);
+
+  // function callApi2() {
+  //   axios.get("/api/postlist").then((res) => {
+  //     testcase2(res.data);
+  //   });
+  // }
+  const callApi = () => {
+    axios.get("/api/postlist").then((res) => {
+      console.log(res.data.array1);
+      testcase2(res.data.array1);
+    });
+
+    // dispatch({ type: ListRoad, data: testcase1 });
+  };
+  // DB INSERT
+  const insertApi = (text) => {
+    axios
+      .post("/api/postlist", {
+        textcommend: text,
+        toglelist: 0,
+        userId: "",
+      })
+      .then((res) => {
+        console.log("Ist_DB : ", res.data);
+      });
+  };
+
+  const deleteApi = (text) => {
+    axios.post(`/api/postlist/:id`, { id: text }).then((res) => {
+      console.log("Del_DB : ", res.data);
+    });
+  };
+  const [textChange1, textChange2] = useState("안녕하세용~");
+  const changeData = (value, text) => {
+    axios
+      .post(`/api/postlist/:id/edit`, {
+        id: value,
+        textcommend: text,
+      })
+      .then((res) => {
+        console.log("Change_DB : ", res.data);
+      });
+  };
+  // 댓글을 DB에 추가
+  const commendInsertdata = (Id, text, count) => {
+    axios
+      .post(`/api/postlist/:id/editcommend`, {
+        textcommend2: text,
+        userId: "",
+        postId: "",
+        IdNumber: Id,
+        count: count,
+      })
+      .then((res) => {
+        console.log("commend_DB : ", res.data);
+      });
+  };
+  const commendDeletedata = (idnum, commnedid, IdNumber) => {
+    axios
+      .post(`/api/postlist/:id/delCommend`, {
+        id: idnum,
+        id2: commnedid,
+        IdNumber: IdNumber,
+      })
+      .then((res) => {
+        console.log("del-commend", res.data);
+      });
+  };
+  //    위쪽은
+  //    axios DB연동
+  //    테스트중
+  //
   const listCloneData = useSelector((state) => state);
 
   const dispatch = useDispatch();
@@ -64,14 +148,19 @@ function PostList() {
 
   const [cotext1, cotext2] = useState("");
 
-  const getText = () => {
-    return text1;
-  };
   const coTextChange = (e) => {
     cotext2(e.target.value);
   };
+  const [listCloneDataLeng, listCloneDataLeng2] = useState();
+  useEffect(() => {
+    dispatch(listroadrequest());
+
+    dispatch(commentloadrequest());
+  }, []);
 
   useEffect(() => {
+    // console.log("목록 : ", testcase1);
+    // console.log("d:", testcase1);
     console.log("listCloneData", listCloneData);
   }, [listCloneData]);
 
@@ -80,7 +169,11 @@ function PostList() {
   };
 
   const textAdd = (text) => {
+    if (text === "") {
+      return;
+    }
     sessionStorage.setItem("Text1", text);
+    insertApi(text);
     //dispatch({ type: ListAdd, data: { textcommend: text1 } });
     dispatch(listaddrequest());
     // dispatch(listadd(text1));
@@ -89,33 +182,56 @@ function PostList() {
   };
   const deleteList = (id) => {
     sessionStorage.setItem("DelelteNum", id);
+    deleteApi(id);
     // sessionStorage.setItem("DelelteNum2", 1);
     //dispatch({ type: ListDelete, payload: id, payload2: 1 });
     dispatch(listremoverequest());
   };
-
+  // 댓글 숨기기
   const commentExpend = (id) => {
     dispatch({ type: ToggleComment, payload: id });
   };
-  const commendAdd2 = (id) => {
+  //댓글 등록
+  const [commendcount, commendcount2] = useState(null);
+  const [vid, vid2] = useState(0);
+  const [equlsid, equlsid2] = useState(false);
+
+  const commendAdd2 = (v) => {
+    let IdnumberMax = [...v.comment];
+    commendcount2(IdnumberMax.length + 1);
+    cotext2(sessionStorage.getItem("commendText"));
     if (cotext1 == "") {
       return;
     }
+
+    console.log("크기 : ", IdnumberMax.length);
+    console.log(v.id, vid);
+    if (v.id !== vid) {
+      commendcount2(IdnumberMax.length);
+    }
+    vid2(v.id);
+    commendcount2(IdnumberMax.length);
+    console.log("count : ", commendcount);
     dispatch({
       type: CommentAdd,
-      data: { textcommend2: cotext1 },
-      payload: id,
+      data: { textcommend2: cotext1, count: commendcount },
+      payload: v.id,
     });
+    commendInsertdata(v.id, cotext1, commendcount);
+    let IdnumberMax2 = [...v.comment];
+
+    sessionStorage.setItem("commendText", "");
     cotext2("");
   };
-  const commendDelete = (v, commend) => {
-    console.log(commend);
+  const commendDelete = (v, commendId, IdNumber) => {
+    console.log("삭제대상 : ", commendId);
     dispatch({
       type: CommentDelete,
-      payload: commend,
+      payload: commendId,
       payload2: 1,
       payload3: v,
     });
+    commendDeletedata(v, commendId, IdNumber);
   };
   // 게시물 수정
   const [revisation1, revisation2] = useState("");
@@ -143,9 +259,11 @@ function PostList() {
   };
   // 수정 버튼을 클릭시 게시물 수정하는 함수
   const revisationText2 = () => {
+    const dataChange = null;
     listCloneData.map((index) => {
       if (index.id == getRevisation1) {
         if (reivisationChagnge) {
+          changeData(getRevisation1, revisation1);
           dispatch({
             type: Revisation,
             payload: getRevisation1,
@@ -154,11 +272,13 @@ function PostList() {
         }
       }
     });
+
     readBoolean2(!readBoolean);
   };
   const coTextChangeFung = (e) => {
     coTextChange(e);
   };
+
   const listOutput =
     listCloneData &&
     listCloneData.map((v) => (
@@ -172,24 +292,29 @@ function PostList() {
           comment={v.toglelist}
           commend={coTextChangeFung}
           commend2={cotext1}
-          commendAdd2={() => commendAdd2(v.id)}
+          commendAdd2={() => commendAdd2(v)}
           revisationText={() => revisationText(v)}
           revisationToggle={readBoolean}
           onChangeText={reivisationChagnge}
-          commendAll={v.comment.map((commend) => (
-            <Commend>
-              {commend.textcommend2}
-              {
-                <p
-                  className="DeleteCommend"
-                  onClick={() => commendDelete(v.id, commend.id)}
-                >
-                  삭제
-                </p>
-              }
-              {<p className="Revisation">수정</p>}
-            </Commend>
-          ))}
+          commendAll={
+            v.comment &&
+            v.comment.map((commend) => (
+              <Commend>
+                {commend.textcommend2}
+                {
+                  <p
+                    className="DeleteCommend"
+                    onClick={() =>
+                      commendDelete(v.id, commend.id, commend.IdNumber)
+                    }
+                  >
+                    삭제
+                  </p>
+                }
+                {<p className="Revisation">수정</p>}
+              </Commend>
+            ))
+          }
         ></PostListAll>
       </>
     ));
@@ -199,6 +324,7 @@ function PostList() {
         <p type="button" className="ptag" onClick={() => textAdd(text1)}>
           게시물등록
         </p>
+
         <input
           onChange={(e) => {
             if (true) {
@@ -217,7 +343,23 @@ function PostList() {
         <p onClick={() => revisationText2()}>수정</p>
         <p onClick={() => revisationCancle()}>취소</p>
       </OnChangeDiv>
-
+      <p type="button" onClick={() => callApi()}>
+        잠깐테스트
+      </p>
+      <input onChange={handleChange} />
+      <button onClick={insertApi}>Submit</button>
+      <button onClick={deleteApi}>del</button>
+      <ul>
+        {testcase1 &&
+          testcase1.map((user) => (
+            <div>
+              <li key={user.id}>
+                {user.id} : {user.textcommend}
+              </li>
+              <button onClick={() => changeData(user.id)}>수정</button>
+            </div>
+          ))}
+      </ul>
       <div>{listOutput}</div>
     </>
   );

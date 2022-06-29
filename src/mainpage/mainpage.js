@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "../header/header";
-import PostList from "./postList/postList";
+import PostList from "./postList";
 import styled from "styled-components";
 import FooterMain from "../footer/footer";
 function MainPage() {
