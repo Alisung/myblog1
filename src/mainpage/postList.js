@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import PostListAll from "./postListAll";
+import { Link } from "react-router-dom";
 import {
   ListRoad,
   listroad,
@@ -138,7 +139,7 @@ function PostList() {
   //    axios DB연동
   //    테스트중
   //
-  const listCloneData = useSelector((state) => state);
+  const listCloneData = useSelector((state) => state.postReducer);
 
   const dispatch = useDispatch();
 
@@ -357,6 +358,7 @@ function PostList() {
                 {user.id} : {user.textcommend}
               </li>
               <button onClick={() => changeData(user.id)}>수정</button>
+              <Link to={`/user:${user.id}`}>이동</Link>
             </div>
           ))}
       </ul>

@@ -37,10 +37,14 @@ function* addPost() {
   yield delay(1000);
   yield put(listadd(callText));
 }
+function removepostApi() {
+  return axios.get("/api/postlist");
+}
 function* removePost() {
+  const response = yield call(removepostApi);
   const calltext = sessionStorage.getItem("DelelteNum");
   yield delay(1000);
-  yield put(listdelete(calltext));
+  yield put(listdelete(calltext, response.data.array2));
 }
 function* watchPostload() {
   yield takeLatest(ListRoadRequest, loadpost);

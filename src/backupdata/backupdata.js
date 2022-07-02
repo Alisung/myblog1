@@ -37,9 +37,9 @@ export const backupListData = {
   postalls: [],
 };
 
-function rootReducer(state = backupListData.postalls, action) {
+function postReducer(state = backupListData.postalls, action) {
   if (action.type === "ListRoadRequest") {
-    return console.log("목록 불러오는중");
+    return state;
   } else if (action.type === "ListRoad") {
     const newstate = [...action.payload];
     console.log("new: ", newstate);
@@ -173,7 +173,7 @@ function rootReducer(state = backupListData.postalls, action) {
         : index
     );
     return togleFliterList;
-  }
+  } else return state;
 }
 
-export default rootReducer;
+export default postReducer;
