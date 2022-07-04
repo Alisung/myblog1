@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { legacy_createStore } from "redux";
 const Formstyle = styled.div`
   background-color: azure;
   width: 100%;
@@ -19,13 +18,7 @@ const Formstyle = styled.div`
     margin-top: 30px;
     margin-right: 30px;
   }
-  .list2 {
-    float: right;
-    list-style: none;
-    margin-top: 30px;
-    margin-right: 30px;
-    display: ${(props) => (props.display ? "none" : "block")};
-  }
+
   .list3 {
     float: right;
     list-style: none;
@@ -58,7 +51,6 @@ function Header() {
     sessionStorage.setItem("loginboolData", false);
     sessionStorage.setItem("loginId", "");
     setlogInSuccess(sessionStorage.getItem("loginboolData"));
-    // window.location.reload();
   };
 
   return (
@@ -70,7 +62,6 @@ function Header() {
         <Link to="/sign">
           <li className="list21">회원가입</li>
         </Link>
-
         <Link to="/login">
           <li className="list3" onClick={logoutEvent}>
             {logInSuccess == "true" ? `${loginId} 로그아웃` : "로그인"}
