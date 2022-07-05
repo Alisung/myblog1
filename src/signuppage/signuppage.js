@@ -16,18 +16,10 @@ function SignupPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
-  useEffect(() => {
-    console.log("email :", email);
-  }, [email]);
-  useEffect(() => {
-    console.log("id :", id);
-  }, [id]);
-  useEffect(() => {
-    console.log("password :", password);
-  }, [password]);
-  useEffect(() => {
-    console.log("name :", name);
-  }, [name]);
+  useEffect(() => {}, [email]);
+  useEffect(() => {}, [id]);
+  useEffect(() => {}, [password]);
+  useEffect(() => {}, [name]);
 
   const targetId = (e) => {
     setId(e.target.value);

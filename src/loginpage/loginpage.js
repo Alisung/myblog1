@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Header from "../header/header";
@@ -23,34 +23,37 @@ function LoginPage() {
   };
 
   useEffect(() => {
-    console.log("loginDatalist", loginDatalist);
+    if (login === true) {
+      console.log("로그인리스트 : ", loginDatalist);
+      console.log("회원가입리스트 : ", signupDatalist);
+      if (loginEquels()) {
+        sessionStorage.setItem("loginboolData", true);
+        sessionStorage.setItem("loginId", loginId);
+        // setlogin(sessionStorage.getItem("loginboolData"));
+        // window.location.reload(true);
+      } else {
+        console.log("회원정보가 일치하지 않습니다");
+        alert("회원정보가 일치하지 않습니다.");
+      }
+      setloginId("");
+      setloginPassword("");
+    }
   }, [loginDatalist]);
 
   const loginEquels = () => {
-    signupDatalist.map((index) => {
+    for (let i = 0; i < signupDatalist.length; i++) {
       if (
-        index.id === loginDatalist.id &&
-        index.password === loginDatalist.password
+        signupDatalist[i].id === loginDatalist.id &&
+        signupDatalist[i].password === loginDatalist.password
       ) {
         return true;
-      } else return false;
-    });
-  };
-
-  const loginStart = () => {
-    dispatch(loginaction(loginId, LoginPassword));
-    console.log("로그인리스트 : ", loginDatalist);
-    console.log("회원가입리스트 : ", signupDatalist);
-    if (loginEquels) {
-      sessionStorage.setItem("loginboolData", true);
-      sessionStorage.setItem("loginId", loginId);
-      // setlogin(sessionStorage.getItem("loginboolData"));
-      // window.location.reload(true);
-    } else {
-      console.log("회원정보가 일치하지 않습니다");
-      return;
+      }
     }
   };
+  const loginDispatch = () => {
+    dispatch(loginaction(loginId, LoginPassword));
+  };
+  const loginStart = () => {};
   return (
     <>
       <Header></Header>
@@ -60,7 +63,15 @@ function LoginPage() {
         password :{" "}
         <input onChange={passwordOnChange} value={LoginPassword}></input>
         <br />
-        <button onClick={() => loginStart()}>Login</button>
+        <button
+          onClick={() => {
+            dispatch(loginaction(loginId, LoginPassword));
+            setlogin(true);
+            window.location.reload();
+          }}
+        >
+          Login
+        </button>
       </LoginBox>
     </>
   );

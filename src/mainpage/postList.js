@@ -177,6 +177,7 @@ function PostList() {
     insertApi(text);
     //dispatch({ type: ListAdd, data: { textcommend: text1 } });
     dispatch(listaddrequest());
+    console.log("테스트 안뜨는구만: ", listCloneData);
     // dispatch(listadd(text1));
 
     text2("");

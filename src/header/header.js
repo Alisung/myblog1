@@ -48,6 +48,9 @@ function Header() {
   );
 
   const logoutEvent = () => {
+    if (logInSuccess === "true") {
+      window.location.reload();
+    }
     sessionStorage.setItem("loginboolData", false);
     sessionStorage.setItem("loginId", "");
     setlogInSuccess(sessionStorage.getItem("loginboolData"));
