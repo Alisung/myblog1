@@ -82,12 +82,12 @@ function PostList() {
     // dispatch({ type: ListRoad, data: testcase1 });
   };
   // DB INSERT
-  const insertApi = (text) => {
+  const insertApi = (text, loginid) => {
     axios
       .post("/api/postlist", {
         textcommend: text,
         toglelist: 0,
-        userId: "",
+        userId: loginid,
       })
       .then((res) => {
         console.log("Ist_DB : ", res.data);
@@ -111,12 +111,12 @@ function PostList() {
       });
   };
   // 댓글을 DB에 추가
-  const commendInsertdata = (Id, text, count) => {
+  const commendInsertdata = (Id, text, count, postid) => {
     axios
       .post(`/api/postlist/:id/editcommend`, {
         textcommend2: text,
         userId: "",
-        postId: "",
+        postId: postid,
         IdNumber: Id,
         count: count,
       })
@@ -140,13 +140,13 @@ function PostList() {
   //    테스트중
   //
   const listCloneData = useSelector((state) => state.postReducer);
-
+  const loginCloneData = useSelector((state) => state.logInReducer);
   const dispatch = useDispatch();
 
   // 두 개 만들어서 하나는 입력필드, 하나는 출력 필드에 출력하는 방법.
   // 입력시 text 변환 객체
   const [text1, text2] = useState("");
-
+  const [userid, setuserid] = useState(null);
   const [cotext1, cotext2] = useState("");
 
   const coTextChange = (e) => {
@@ -163,6 +163,7 @@ function PostList() {
     // console.log("목록 : ", testcase1);
     // console.log("d:", testcase1);
     console.log("listCloneData", listCloneData);
+    console.log("logindata", loginCloneData);
   }, [listCloneData]);
 
   const textChagnge = (e) => {
@@ -170,14 +171,15 @@ function PostList() {
   };
 
   const textAdd = (text) => {
+    const logInId = sessionStorage.getItem("loginId");
+
     if (text === "") {
       return;
     }
     sessionStorage.setItem("Text1", text);
-    insertApi(text);
+    insertApi(text, logInId);
     //dispatch({ type: ListAdd, data: { textcommend: text1 } });
     dispatch(listaddrequest());
-    console.log("테스트 안뜨는구만: ", listCloneData);
     // dispatch(listadd(text1));
 
     text2("");
@@ -197,8 +199,11 @@ function PostList() {
   const [commendcount, commendcount2] = useState(null);
   const [vid, vid2] = useState(0);
   const [equlsid, equlsid2] = useState(false);
+  const [postId, setPostId] = useState("");
 
   const commendAdd2 = (v) => {
+    // setPostId(sessionStorage.getItem("loginId"));
+    const postId = sessionStorage.getItem("loginId");
     let IdnumberMax = [...v.comment];
     commendcount2(IdnumberMax.length + 1);
     cotext2(sessionStorage.getItem("commendText"));
@@ -216,10 +221,15 @@ function PostList() {
     console.log("count : ", commendcount);
     dispatch({
       type: CommentAdd,
-      data: { textcommend2: cotext1, count: commendcount },
+      data: {
+        textcommend2: cotext1,
+        count: commendcount,
+        userid: v.id,
+        postid: postId,
+      },
       payload: v.id,
     });
-    commendInsertdata(v.id, cotext1, commendcount);
+    commendInsertdata(v.id, cotext1, commendcount, postId);
     let IdnumberMax2 = [...v.comment];
 
     sessionStorage.setItem("commendText", "");
@@ -289,6 +299,7 @@ function PostList() {
           key={v.id}
           name={v}
           text={v.textcommend}
+          userid={v.userId}
           deletelist={() => deleteList(v.id)}
           commentList={() => commentExpend(v.id)}
           comment={v.toglelist}
@@ -302,7 +313,7 @@ function PostList() {
             v.comment &&
             v.comment.map((commend) => (
               <Commend>
-                {commend.textcommend2}
+                {commend.postId} : {commend.textcommend2}
                 {
                   <p
                     className="DeleteCommend"
@@ -313,7 +324,7 @@ function PostList() {
                     삭제
                   </p>
                 }
-                {<p className="Revisation">수정</p>}
+                {/* {<p className="Revisation">수정</p>} */}
               </Commend>
             ))
           }

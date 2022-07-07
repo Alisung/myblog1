@@ -18,9 +18,9 @@ export const ListAddRequest = "ListAddRequest";
 export const ListRemoveRequest = "ListRemoveRequest";
 export const CommentLoadRequest = "CommentLoadRequest";
 //액션 생성 함수
-export const listadd = (data1) => ({
+export const listadd = (data1, data2) => ({
   type: ListAdd,
-  data: { textcommend: data1 },
+  data: { textcommend: data1, userId: data2 },
 });
 export const listdelete = (data1, data2) => ({
   type: ListDelete,
@@ -58,7 +58,7 @@ function postReducer(state = backupListData.postalls, action) {
       textcommend: action.data.textcommend,
       comment: [],
       toglelist: 0,
-      userId: "",
+      userId: action.data.userId,
     });
 
     return newstate;
@@ -133,9 +133,9 @@ function postReducer(state = backupListData.postalls, action) {
                 // 게시물 idnumber
                 IdNumber: index.id,
                 // 게시물 등록한 iD
-                userId: "",
+                userId: action.data.userid,
                 // 댓글 등록한 id
-                postId: "",
+                postId: action.data.postid,
                 count: action.data.count,
               },
             ],

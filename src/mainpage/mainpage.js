@@ -7,7 +7,6 @@ function MainPage() {
   return (
     <>
       <Header></Header>
-
       <PostList></PostList>
       <FooterMain></FooterMain>
     </>

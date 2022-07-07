@@ -21,12 +21,13 @@ function LoginPage() {
   const passwordOnChange = (e) => {
     setloginPassword(e.target.value);
   };
-
+  // let abc;
   useEffect(() => {
     if (login === true) {
       console.log("로그인리스트 : ", loginDatalist);
       console.log("회원가입리스트 : ", signupDatalist);
       if (loginEquels()) {
+        // abc = sessionStorage.setItem("loginboolData", true);
         sessionStorage.setItem("loginboolData", true);
         sessionStorage.setItem("loginId", loginId);
         // setlogin(sessionStorage.getItem("loginboolData"));
@@ -53,10 +54,13 @@ function LoginPage() {
   const loginDispatch = () => {
     dispatch(loginaction(loginId, LoginPassword));
   };
+
+  useEffect(() => {}, login);
+  const [propsBool, setpropsBool] = useState("");
   const loginStart = () => {};
   return (
     <>
-      <Header></Header>
+      <Header props={propsBool}></Header>
       <LoginBox>
         id: <input onChange={idOnChange} value={loginId}></input>
         <br />
@@ -67,7 +71,8 @@ function LoginPage() {
           onClick={() => {
             dispatch(loginaction(loginId, LoginPassword));
             setlogin(true);
-            window.location.reload();
+            setpropsBool(loginId);
+            // window.location.reload();
           }}
         >
           Login

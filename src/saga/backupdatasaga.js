@@ -33,9 +33,10 @@ function* loadpost() {
 }
 function* addPost() {
   const callText = sessionStorage.getItem("Text1");
+  const callUserId = sessionStorage.getItem("loginId");
   console.log("포스트 등록");
-  yield delay(1000);
-  yield put(listadd(callText));
+  // yield delay(1000);
+  yield put(listadd(callText, callUserId));
 }
 function removepostApi() {
   return axios.get("/api/postlist");
@@ -43,7 +44,7 @@ function removepostApi() {
 function* removePost() {
   const response = yield call(removepostApi);
   const calltext = sessionStorage.getItem("DelelteNum");
-  yield delay(1000);
+  // yield delay(1000);
   yield put(listdelete(calltext, response.data.array2));
 }
 function* watchPostload() {

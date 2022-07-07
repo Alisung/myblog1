@@ -11,6 +11,7 @@ const AllList = styled.div`
   & .posttext {
     width: 500px;
     height: 100px;
+    border: solid 1px #333;
   }
   & .deletebox {
     float: right;
@@ -36,6 +37,7 @@ const Contextlist = styled.div`
 `;
 function PostListAll({
   text,
+  userid,
   deletelist,
   comment,
   commentList,
@@ -68,7 +70,11 @@ function PostListAll({
   return (
     <>
       <AllList>
-        <input className="posttext" readOnly value={text}></input>
+        <div className="posttext" readOnly>
+          <p>
+            {userid} : {text}
+          </p>
+        </div>
         <p className="deletebox" onClick={deletelist}>
           삭제
         </p>

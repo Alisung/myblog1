@@ -41,19 +41,30 @@ const LogoutText = styled.li`
   margin-top: 30px;
   margin-right: 30px;
 `;
-function Header() {
+function Header({ props, propsBool }) {
+  // let loginid2 = props;
+  // let successBool = propsBool;
   const loginId = sessionStorage.getItem("loginId");
+  let logInSuccess2 = sessionStorage.getItem("loginboolData");
+  const [logoutSuccess, setlogoutSuccess] = useState(null);
   const [logInSuccess, setlogInSuccess] = useState(
     sessionStorage.getItem("loginboolData")
   );
-
+  useEffect(() => {
+    console.log(loginId);
+  }, [logoutSuccess]);
   const logoutEvent = () => {
     if (logInSuccess === "true") {
-      window.location.reload();
+      // window.location.reload();
     }
+
     sessionStorage.setItem("loginboolData", false);
     sessionStorage.setItem("loginId", "");
     setlogInSuccess(sessionStorage.getItem("loginboolData"));
+    logInSuccess2 = sessionStorage.getItem("loginboolData");
+    setlogoutSuccess(logInSuccess2);
+    console.log(logInSuccess2);
+    console.log(logoutSuccess);
   };
 
   return (
@@ -67,7 +78,7 @@ function Header() {
         </Link>
         <Link to="/login">
           <li className="list3" onClick={logoutEvent}>
-            {logInSuccess == "true" ? `${loginId} 로그아웃` : "로그인"}
+            {logInSuccess2 == "true" ? `${loginId} 로그아웃` : "로그인"}
           </li>
         </Link>
       </ul>
