@@ -41,10 +41,15 @@ const Commend = styled.li`
   list-style-type: none;
   & .DeleteCommend {
     float: right;
+    display: ${(props) => (props.display ? "block" : "none")};
   }
   & .Revisation {
     float: right;
   }
+`;
+const DeleteCommend = styled.p`
+  float: right;
+  display: ${(props) => (props.display1 ? "block" : "none")};
 `;
 const OnChangeDiv = styled.div`
   display: ${(props) => (props.display ? "block" : "none")};
@@ -99,7 +104,7 @@ function PostList() {
       console.log("Del_DB : ", res.data);
     });
   };
-  const [textChange1, textChange2] = useState("안녕하세용~");
+
   const changeData = (value, text) => {
     axios
       .post(`/api/postlist/:id/edit`, {
@@ -160,8 +165,6 @@ function PostList() {
   }, []);
 
   useEffect(() => {
-    // console.log("목록 : ", testcase1);
-    // console.log("d:", testcase1);
     console.log("listCloneData", listCloneData);
     console.log("logindata", loginCloneData);
   }, [listCloneData]);
@@ -204,6 +207,7 @@ function PostList() {
   const commendAdd2 = (v) => {
     // setPostId(sessionStorage.getItem("loginId"));
     const postId = sessionStorage.getItem("loginId");
+    setPostId(postId);
     let IdnumberMax = [...v.comment];
     commendcount2(IdnumberMax.length + 1);
     cotext2(sessionStorage.getItem("commendText"));
@@ -269,6 +273,22 @@ function PostList() {
     revisation2("");
     readBoolean2(!readBoolean);
   };
+  const postEqulsLoginId = (userId) => {
+    const loginidBool = sessionStorage.getItem("loginId");
+    if (loginidBool === userId) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+  const commendRevisationLoginId = (postId) => {
+    const loginidBool = sessionStorage.getItem("loginId");
+    if (loginidBool === postId) {
+      return true;
+    } else {
+      return false;
+    }
+  };
   // 수정 버튼을 클릭시 게시물 수정하는 함수
   const revisationText2 = () => {
     const dataChange = null;
@@ -307,7 +327,8 @@ function PostList() {
           commend2={cotext1}
           commendAdd2={() => commendAdd2(v)}
           revisationText={() => revisationText(v)}
-          revisationToggle={readBoolean}
+          revisationToggle={postEqulsLoginId(v.userId)}
+          deleteToggle={postEqulsLoginId(v.userId)}
           onChangeText={reivisationChagnge}
           commendAll={
             v.comment &&
@@ -315,14 +336,14 @@ function PostList() {
               <Commend>
                 {commend.postId} : {commend.textcommend2}
                 {
-                  <p
-                    className="DeleteCommend"
+                  <DeleteCommend
+                    display1={commendRevisationLoginId(commend.postId)}
                     onClick={() =>
                       commendDelete(v.id, commend.id, commend.IdNumber)
                     }
                   >
                     삭제
-                  </p>
+                  </DeleteCommend>
                 }
                 {/* {<p className="Revisation">수정</p>} */}
               </Commend>

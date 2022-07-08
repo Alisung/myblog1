@@ -13,15 +13,17 @@ const AllList = styled.div`
     height: 100px;
     border: solid 1px #333;
   }
-  & .deletebox {
-    float: right;
-  }
+
   & .commentlist {
     float: right;
   }
 `;
 const RavisationTag = styled.p`
   display: ${(props) => (props.display1 ? "none" : "block")};
+  float: right;
+`;
+const DeleteTag = styled.p`
+  display: ${(props) => (props.display ? "none" : "block")};
   float: right;
 `;
 const ContextlistAll = styled.div`
@@ -47,7 +49,7 @@ function PostListAll({
   commendAll,
   revisationText,
   readBoolean,
-
+  deleteToggle,
   onChangeValue,
   revisationToggle,
 }) {
@@ -75,9 +77,9 @@ function PostListAll({
             {userid} : {text}
           </p>
         </div>
-        <p className="deletebox" onClick={deletelist}>
+        <DeleteTag onClick={deletelist} display={deleteToggle}>
           삭제
-        </p>
+        </DeleteTag>
         <p className="commentlist" onClick={commentList}>
           댓글
         </p>

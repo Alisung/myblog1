@@ -15,6 +15,7 @@ function LoginPage() {
   const [loginId, setloginId] = useState("");
   const [LoginPassword, setloginPassword] = useState("");
   const [login, setlogin] = useState(false);
+  const [propsBool, setpropsBool] = useState("");
   const idOnChange = (e) => {
     setloginId(e.target.value);
   };
@@ -56,8 +57,7 @@ function LoginPage() {
   };
 
   useEffect(() => {}, login);
-  const [propsBool, setpropsBool] = useState("");
-  const loginStart = () => {};
+
   return (
     <>
       <Header props={propsBool}></Header>

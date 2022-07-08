@@ -15,7 +15,7 @@ function logInReducer(state = logInData, action) {
       id: action.idData,
       password: action.passwordData,
     };
-    console.log("뭐지>>>", setstate);
+
     return setstate;
   }
   return state;
