@@ -142,7 +142,7 @@ function PostList() {
   };
   //    위쪽은
   //    axios DB연동
-  //    테스트중
+  //    
   //
   const listCloneData = useSelector((state) => state.postReducer);
   const loginCloneData = useSelector((state) => state.logInReducer);
