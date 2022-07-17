@@ -73,6 +73,9 @@ function Header({ props, propsBool }) {
         <Link to="/">
           <li className="list1">Mypage</li>
         </Link>
+        <Link to="/chat">
+          <li className="list1">chatting</li>
+        </Link>
         <Link to="/sign">
           <li className="list21">회원가입</li>
         </Link>

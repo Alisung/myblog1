@@ -16,6 +16,7 @@ function LoginPage() {
   const [LoginPassword, setloginPassword] = useState("");
   const [login, setlogin] = useState(false);
   const [propsBool, setpropsBool] = useState("");
+
   const idOnChange = (e) => {
     setloginId(e.target.value);
   };

@@ -4,7 +4,7 @@ import LoginPage from "./loginpage/loginpage";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainPage from "./mainpage/mainpage";
 import SignupPage from "./signuppage/signuppage";
-import axios from "axios";
+import Chatting from "./chatpage/chat";
 function App() {
   return (
     <>
@@ -13,6 +13,7 @@ function App() {
           <Route path="/" element={<MainPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/sign" element={<SignupPage />} />
+          <Route path="/chat" element={<Chatting />} />
         </Routes>
       </BrowserRouter>
     </>
