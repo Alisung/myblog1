@@ -2,41 +2,6 @@ import React, { useRef, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
-const AllList = styled.div`
-  margin: 5% 0 0 26%;
-  width: 600px;
-
-  height: auto;
-  border: solid 1px #333;
-  & .posttext {
-    width: 500px;
-    height: 100px;
-    border: solid 1px #333;
-  }
-
-  & .commentlist {
-    float: right;
-  }
-`;
-const RavisationTag = styled.p`
-  display: ${(props) => (props.display1 ? "none" : "block")};
-  float: right;
-`;
-const DeleteTag = styled.p`
-  display: ${(props) => (props.display ? "none" : "block")};
-  float: right;
-`;
-const ContextlistAll = styled.div`
-  border: 1px solid #333;
-  width: 600px;
-  height: 100px;
-`;
-const Contextlist = styled.div`
-  display: ${(props) => (props.display ? "none" : "block")};
-  border: 1px solid #333;
-  width: 600px;
-  height: 100%;
-`;
 function PostListAll({
   text,
   userid,
@@ -105,3 +70,39 @@ function PostListAll({
 }
 
 export default PostListAll;
+
+const AllList = styled.div`
+  margin: 5% 0 0 26%;
+  width: 600px;
+
+  height: auto;
+  border: solid 1px #333;
+  & .posttext {
+    width: 500px;
+    height: 100px;
+    border: solid 1px #333;
+  }
+
+  & .commentlist {
+    float: right;
+  }
+`;
+const RavisationTag = styled.p`
+  display: ${(props) => (props.display1 ? "none" : "block")};
+  float: right;
+`;
+const DeleteTag = styled.p`
+  display: ${(props) => (props.display ? "none" : "block")};
+  float: right;
+`;
+const ContextlistAll = styled.div`
+  border: 1px solid #333;
+  width: 600px;
+  height: 100px;
+`;
+const Contextlist = styled.div`
+  display: ${(props) => (props.display ? "none" : "block")};
+  border: 1px solid #333;
+  width: 600px;
+  height: 100%;
+`;

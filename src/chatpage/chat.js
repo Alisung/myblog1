@@ -56,6 +56,16 @@ function Chatting() {
         },
       ]);
     });
+    socket?.on("muteMsg", (textdata) => {
+      setTextList([
+        ...textList,
+        {
+          id: textdata.socketid,
+          text: textdata.socketText,
+          align: false,
+        },
+      ]);
+    });
     socket?.on("join_msg", (textdata) => {
       setTextList([...textList, { text: textdata.message }]);
     });
@@ -67,9 +77,31 @@ function Chatting() {
     // };
   }, [textList]);
   useEffect(() => {
-    console.log("하하 : ", textList);
-  }, [textList]);
-
+  }, []);
+  // 귓속말을 보낼 대상의 id를 담은 변수
+  const sendSocketID = (indexId) => {
+    setSocketData(indexId);
+    setsocketIdData(socketId);
+    setmuteMsgButtonToggle(true);
+    console.log("소켓 보낼 데이터 : ", socketData);
+  };
+  const [muteMsgButtonToggle, setmuteMsgButtonToggle] = useState(false);
+  const [socketData, setSocketData] = useState(null);
+  const [socketIdData, setsocketIdData] = useState(null);
+  const sendSocketText = () => {
+    if (socketData === socketId) {
+      return;
+    } else {
+      console.log("보내자");
+      socket?.emit("send_socketId", {
+        id: socketData,
+        userid: socketIdData,
+        text: text1,
+      });
+    }
+    setmuteMsgButtonToggle(false);
+    setText("");
+  };
   const roomList =
     roomId1 &&
     roomId1.map((index) => (
@@ -86,19 +118,26 @@ function Chatting() {
         {textList &&
           textList.map((index) => (
             <Alignbox align={index.align}>
-              <p>{index.id}</p>
+              <NamePtag onClick={() => sendSocketID(index.id)}>
+                {index.id}
+              </NamePtag>
               <p>{index.text}</p>
             </Alignbox>
           ))}
       </ChatBox>
       <InputBox onChange={textChange} value={text1}></InputBox>
       <button onClick={sendText}>등록</button>
+      <InputButton onClick={sendSocketText} display={muteMsgButtonToggle}>
+        귓속말 전송
+      </InputButton>
     </>
   );
 }
 
 export default Chatting;
-
+const NamePtag = styled.p`
+  background-color: ${(props) => (props.color ? "yellow" : "white")};
+`;
 const ChatBox = styled.div`
   overflow: auto;
   margin-left: 300px;
@@ -112,6 +151,7 @@ const InputBox = styled.input`
 `;
 const InputButton = styled.button`
   margin-left: 300px;
+  display: ${(props) => (props.display ? "block" : "none")};
 `;
 const Alignbox = styled.div`
   text-align: ${(props) => (props.align ? "left" : "right")}; ;
