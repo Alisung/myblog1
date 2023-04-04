@@ -1,6 +1,4 @@
-koreaIT 프론트엔드 강사님 자료 많이 참고 했습니다
-myblogstudy 강의자료 참고
-여러 북마크한 자료들 참고했습니다 
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
